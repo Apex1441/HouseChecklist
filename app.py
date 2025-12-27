@@ -44,7 +44,7 @@ def main():
 
     # --- Sidebar for Management ---
     with st.sidebar:
-        st.header("⚙️ Task Manager")
+        st.header(" Task Manager")
         
         # A. ADD NEW TASK
         st.subheader("Add New Task")
@@ -107,3 +107,4 @@ def main():
 if __name__ == "__main__":
 
     main()
+
