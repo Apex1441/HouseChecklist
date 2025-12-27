@@ -43,7 +43,7 @@ def main ():
     with tab1:
         st.subheader("Today's Chores")
         for t in tasks:
-            status = st.checkbox(f'{t['task_name']} ({t['frequency']}), value=t['is_completed'], key = t['id']')
+            status = st.checkbox(f"{t['task_name']} ({t['frequency']}), value=t['is_completed'], key = t['id']")
             if status != t['is_completed']:
                 supabase.table("tasks").update({"is_completed": status}).eq('id', t['id']).execute()
     
@@ -61,4 +61,5 @@ def main ():
         calander(events=events, options={'initialView': "dayGridMonth"})
 if __name__ == "__main__":
     main()
+
 
