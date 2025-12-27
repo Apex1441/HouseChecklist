@@ -109,9 +109,49 @@ def main():
                 st.rerun()
 
     with tab2:
-        st.subheader("Schedule View")
-        events = [{"title": t['task_name'], "start": t['last_reset'], "color": "#28a745" if t['is_completed'] else "#dc3545"} for t in tasks]
-        calendar(events=events, options={"initialView": "dayGridMonth"})
+        st.subheader("Household Schedule")
+        
+        try:
+            # 1. Sanitize the data
+            events = []
+            for t in tasks:
+                # Ensure the date is a valid string for the calendar
+                event_date = str(t['last_reset']) if t['last_reset'] else str(today)
+                
+                events.append({
+                    "title": t['task_name'],
+                    "start": event_date,
+                    "color": "#28a745" if t['is_completed'] else "#dc3545",
+                    "allDay": True
+                })
+
+            # 2. Define Calendar Configuration
+            calendar_options = {
+                "initialView": "dayGridMonth",
+                "height": 600, # Forces visibility
+                "selectable": True,
+                "headerToolbar": {
+                    "left": "prev,next today",
+                    "center": "title",
+                    "right": "dayGridMonth"
+                }
+            }
+
+            # 3. Attempt to render the component
+            if not events:
+                st.info("No tasks found for this household. Add tasks in the Management tab.")
+            else:
+                calendar(
+                    events=events, 
+                    options=calendar_options,
+                    key="household_calendar" # Adding a unique key helps Streamlit track it
+                )
+
+        except Exception as e:
+            st.error("The calendar component failed to load.")
+            st.write("Technical details for troubleshooting:")
+            st.code(str(e))
+            st.info("Check if 'streamlit-calendar' is in your requirements.txt and properly imported.")
 
     with tab3:
         st.subheader("System Audit Log")
@@ -134,4 +174,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
