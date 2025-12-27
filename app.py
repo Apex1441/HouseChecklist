@@ -33,7 +33,7 @@ def main ():
                 needs_reset = True
         if needs_reset:
             supabase.table('tasks').update({
-                "is_completed": False
+                "is_completed": False,
                 "last_reset": str(today)
             }).eq("id", task['id']).execute()
     
@@ -61,3 +61,4 @@ def main ():
         calander(events=events, options={'initialView': "dayGridMonth"})
 if __name__ == "__main__":
     main()
+
