@@ -47,7 +47,7 @@ def main ():
             if status != t['is_completed']:
                 supabase.table("tasks").update({"is_completed": status}).eq('id', t['id']).execute()
     
-    with tab2
+    with tab2:
         #generate Calander events  
         events = []
         for t in tasks:
@@ -61,6 +61,7 @@ def main ():
         calander(events=events, options={'initialView': "dayGridMonth"})
 if __name__ == "__main__":
     main()
+
 
 
 
