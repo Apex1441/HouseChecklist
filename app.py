@@ -41,6 +41,42 @@ def main():
             }).eq("id", task['id']).execute()
     
     # 3. Interactive Tabs
+
+    # --- Sidebar for Management ---
+    with st.sidebar:
+        st.header("⚙️ Task Manager")
+        
+        # A. ADD NEW TASK
+        st.subheader("Add New Task")
+        new_name = st.text_input("Task Name", placeholder="e.g., Take out trash")
+        new_freq = st.selectbox("Frequency", ["daily", "weekly", "monthly"])
+        
+        if st.button("➕ Add Task"):
+            if new_name:
+                supabase.table("tasks").insert({
+                    "household_id": HOUSE_ID, # Use your specific ID
+                    "task_name": new_name,
+                    "frequency": new_freq,
+                    "is_completed": False,
+                    "last_reset": str(today)
+                }).execute()
+                st.success(f"Added {new_name}!")
+                st.rerun()
+            else:
+                st.error("Please enter a name.")
+
+        st.divider()
+
+        # B. DELETE TASKS
+        st.subheader("Remove Task")
+        task_to_delete = st.selectbox("Select task to remove", [t['task_name'] for t in tasks])
+        if st.button("🗑️ Delete Task", type="primary"):
+            # Find the ID of the selected task name
+            selected_id = next(t['id'] for t in tasks if t['task_name'] == task_to_delete)
+            supabase.table("tasks").delete().eq("id", selected_id).execute()
+            st.warning(f"Deleted {task_to_delete}")
+            st.rerun()
+    # Start of top nav bar
     tab1, tab2 = st.tabs([" Checklist", " Calendar View"])
 
     with tab1:
@@ -69,4 +105,5 @@ def main():
         calendar(events=events, options={'initialView': "dayGridMonth"})
 
 if __name__ == "__main__":
+
     main()
