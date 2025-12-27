@@ -63,6 +63,9 @@ def main():
     tasks = response.data
 
     for task in tasks:
+        if task['frequency'] == 'one-time':
+            continue
+
         last_reset = datetime.strptime(task['last_reset'], '%Y-%m-%d').date()
         needs_reset = False
         
@@ -119,7 +122,7 @@ def main():
     with tab4:
         st.subheader("Task Administration")
         new_name = st.text_input("New Task Name")
-        new_freq = st.selectbox("Frequency", ["daily", "weekly", "monthly"])
+        new_freq = st.selectbox("Frequency", ["daily", "weekly", "monthly", "one-time"])
         if st.button("Register Task"):
             supabase.table("tasks").insert({
                 "task_name": new_name, 
@@ -131,3 +134,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
