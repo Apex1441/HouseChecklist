@@ -1,7 +1,7 @@
 import streamlit as st
 from supabase import create_client
 from supabase import datetime, timedelta
-from streamlit_calander import calander
+from streamlit-calender import calender
 
 #1 Setup & Secrets
 supabase = create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"])
@@ -38,7 +38,7 @@ def main ():
             }).eq("id", task['id']).execute()
     
     # Interactive Tabs
-    tab1, tab2 = st.tabs(["Checklist", "Calander View"])
+    tab1, tab2 = st.tabs(["Checklist", "Calender View"])
 
     with tab1:
         st.subheader("Today's Chores")
@@ -61,5 +61,6 @@ def main ():
         calander(events=events, options={'initialView': "dayGridMonth"})
 if __name__ == "__main__":
     main()
+
 
 
